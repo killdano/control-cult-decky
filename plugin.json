@@ -1,0 +1,13 @@
+{
+  "name": "Control Cult",
+  "author": "Control Cult",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": [
+      "controller"
+    ],
+    "description": "Control Cult in Game Mode: status, phone pairing, your controller layout, settings (Solo voice, mic and speaker, hotkeys, widgets, usage, invites) and widgets that stay over the game while you play. Needs Control Cult for Steam Deck installed.",
+    "image": ""
+  }
+}
