@@ -16,7 +16,7 @@ The panel is Control Cult in Game Mode:
 The panel itself is small. Control Cult is a separate app, and the panel's **Install** button installs it. Here is exactly what that does:
 
 1. Downloads Control Cult's setup script from Control Cult's server (`https://noobdeity.kill-dano.workers.dev/deck/setup.sh`) and runs it as your user, never as root.
-2. The script downloads the app, about 90 MB with its own copy of Node.js, into `~/.local/share/steam-input-assistant`.
+2. The script downloads the app, about 90 MB with its own copy of Node.js, into `~/.local/share/control-cult`.
 3. Adds a systemd **user** service (`noobdeity.service`), so Control Cult starts with the Deck and runs in Game Mode.
 4. Turns on Steam's local debug connection, which takes effect the next time Steam starts. Control Cult uses it to read and switch your controller layouts. It stays on the Deck.
 5. Adds "connect a phone" and "Uninstall" entries to Desktop Mode's app menu.

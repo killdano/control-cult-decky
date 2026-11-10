@@ -11,7 +11,11 @@ import urllib.error
 import urllib.parse
 import decky
 
-DATA = os.path.join(decky.DECKY_USER_HOME, ".local", "share", "steam-input-assistant")
+# Control Cult's folder: control-cult, or steam-input-assistant on a Deck the app hasn't moved yet (moveplace.mjs).
+_SHARE = os.path.join(decky.DECKY_USER_HOME, ".local", "share")
+DATA = os.path.join(_SHARE, "control-cult")
+if not os.path.exists(DATA) and os.path.isdir(os.path.join(_SHARE, "steam-input-assistant")):
+    DATA = os.path.join(_SHARE, "steam-input-assistant")
 
 # The watchdog: restarts the app's service when it stops answering here. Every assistant tool runs through the
 # app, so nothing can reach this Deck while it hangs; systemd only steps in after a crash, not a hang.
