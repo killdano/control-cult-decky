@@ -243,8 +243,9 @@ function UnlockSection() {
       <PanelSectionRow><Field label="Your free goats are used up" description="Start the 7-day free trial of a yearly plan at controlcult.com for 8 more goats, then enter the code it gives you here." /></PanelSectionRow>
     </PanelSection>
     <LicenseSection onUnlocked={done} />
+    <SignInSection onDone={done} />
   </>;
-  return <><FreeSection onUnlocked={done} /><LicenseSection onUnlocked={done} /></>;
+  return <><FreeSection onUnlocked={done} /><SignInSection onDone={done} /><LicenseSection onUnlocked={done} /></>;
 }
 
 // Free goats without leaving the Deck: the email gets a link that unlocks this Deck when it's opened,
@@ -270,6 +271,33 @@ function FreeSection({ onUnlocked }: { onUnlocked: () => void }) {
       <PanelSectionRow><TextField label="Your email" value={email} onChange={e => setEmail(e.target.value)} /></PanelSectionRow>
       <PanelSectionRow><ButtonItem layout="below" disabled={busy || !email.trim()} onClick={send}>{busy ? "Sending…" : note?.ok ? "Send again" : "Send my free goats"}</ButtonItem></PanelSectionRow>
       {note ? <PanelSectionRow><Field label={note.ok ? "Check your email" : note.full ? "No free goats right now" : "Not sent"} description={note.text} /></PanelSectionRow> : null}
+    </PanelSection>
+  );
+}
+
+// Back into an account: the email the goats or plan came with gets a link; opening it moves this Deck
+// to that account. The panel watches for the move like it watches for the free goats' unlock.
+function SignInSection({ onDone }: { onDone?: () => void } = {}) {
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  useEffect(() => {
+    if (!note?.ok || !onDone) return;
+    const t = setInterval(() => local("GET", "/license").then(x => { if (x?.active) onDone(); }).catch(() => {}), 5000);
+    return () => clearInterval(t);
+  }, [note?.ok]);
+  const send = async () => {
+    setBusy(true); setNote(null);
+    const r = await local("POST", "/signin", { email: email.trim() }).catch(() => ({ error: "Control Cult isn't answering." }));
+    setBusy(false);
+    setNote(r?.already ? { ok: false, text: "This Deck is already in that account." } : r?.sent ? { ok: true, text: `Sent to ${email.trim()}. Open the email and tap Sign in, on any device (your phone is fine). This Deck switches by itself.` } : { ok: false, text: r?.error || "It didn't send." });
+  };
+  return (
+    <PanelSection title="Your account">
+      <PanelSectionRow><Field label="Sign in to your account" description="Already have goats or a plan under another email? Enter that email and tap the link we send you." /></PanelSectionRow>
+      <PanelSectionRow><TextField label="Your email" value={email} onChange={e => setEmail(e.target.value)} /></PanelSectionRow>
+      <PanelSectionRow><ButtonItem layout="below" disabled={busy || !email.trim()} onClick={send}>{busy ? "Sending…" : note?.ok ? "Send again" : "Send sign-in link"}</ButtonItem></PanelSectionRow>
+      {note ? <PanelSectionRow><Field label={note.ok ? "Check your email" : "Not sent"} description={note.text} /></PanelSectionRow> : null}
     </PanelSection>
   );
 }
@@ -329,6 +357,7 @@ function SettingsPage() {
       {msg ? <Field label="Note" description={msg} /> : null}
 
       <LicenseSection />
+      <SignInSection />
 
       <PanelSection title="Solo voice (talk on the Deck, no phone)">
         <PanelSectionRow><ToggleField label="Solo voice" description="Your Control Cult hotkeys work while this is on." checked={!!s?.enabled} onChange={v => set({ enabled: v })} /></PanelSectionRow>

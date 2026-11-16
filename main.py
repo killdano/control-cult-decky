@@ -328,7 +328,7 @@ class Plugin:
 
     # Settings page and widgets: one passthrough to Control Cult's local server, limited to its known paths.
     async def local(self, method, path, body=None):
-        allowed = ("/settings", "/usage", "/testers", "/invite", "/pair", "/overlay", "/pip", "/client", "/license", "/free")
+        allowed = ("/settings", "/usage", "/testers", "/invite", "/pair", "/overlay", "/pip", "/client", "/license", "/free", "/signin")
         if method not in ("GET", "POST") or path not in allowed:
             return {"error": "not allowed"}
         return await asyncio.to_thread(_local_call, method, path, body)
