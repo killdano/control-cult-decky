@@ -232,8 +232,13 @@ def _ssl_context():
     return _SSL
 
 
+# Cloudflare turns away Python's default user agent (Python-urllib) with 403 Forbidden, so say who we are.
+_UA = "ControlCult-Decky/%s (Steam Deck)" % getattr(decky, "DECKY_PLUGIN_VERSION", "?")
+
+
 def _fetch(url, timeout=60):
-    with urllib.request.urlopen(url, timeout=timeout, context=_ssl_context() if url.startswith("https") else None) as r:
+    req = urllib.request.Request(url, headers={"User-Agent": _UA, "Accept": "*/*"})
+    with urllib.request.urlopen(req, timeout=timeout, context=_ssl_context() if url.startswith("https") else None) as r:
         return r.read()
 
 
