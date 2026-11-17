@@ -353,8 +353,9 @@ function SettingsPage() {
   return (
     <div style={{ marginTop: "40px", height: "calc(100% - 40px)", overflowY: "scroll", padding: "0 24px 40px" }}>
       <h2 style={{ margin: "16px 0 4px" }}>Control Cult settings</h2>
-      {s?.error ? <Field label="Not reachable" description={s.error} /> : null}
+      {s?.error ? <Field label="Not reachable" description={`${s.error} If you removed the app, open the Control Cult panel to install it again, or uninstall this panel in Decky's settings.`} /> : null}
       {msg ? <Field label="Note" description={msg} /> : null}
+      {s?.error ? null : <>
 
       <LicenseSection />
       <SignInSection />
@@ -370,12 +371,12 @@ function SettingsPage() {
       </PanelSection>
 
       <PanelSection title="Hotkeys">
-        <PanelSectionRow><Field label="Talk" description={s?.hotkeys.talk || "Not set. Ask Noob Deity for a talk button."} /></PanelSectionRow>
-        {s?.hotkeys.talk ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "talk" })}>Turn off the talk hotkey</ButtonItem></PanelSectionRow> : null}
-        <PanelSectionRow><Field label="Feedback" description={s?.hotkeys.feedback || "Not set. Ask Noob Deity for a feedback hotkey."} /></PanelSectionRow>
-        {s?.hotkeys.feedback ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "feedback" })}>Turn off the feedback hotkey</ButtonItem></PanelSectionRow> : null}
-        <PanelSectionRow><Field label="Hide widgets" description={s?.hotkeys.hide ? `${s.hotkeys.hide}: takes every widget off the screen, and brings them back.` : "Not set. Ask Noob Deity for a hotkey that hides and shows all widgets."} /></PanelSectionRow>
-        {s?.hotkeys.hide ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "hide" })}>Turn off the hide widgets hotkey</ButtonItem></PanelSectionRow> : null}
+        <PanelSectionRow><Field label="Talk" description={s?.hotkeys?.talk || "Not set. Ask Noob Deity for a talk button."} /></PanelSectionRow>
+        {s?.hotkeys?.talk ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "talk" })}>Turn off the talk hotkey</ButtonItem></PanelSectionRow> : null}
+        <PanelSectionRow><Field label="Feedback" description={s?.hotkeys?.feedback || "Not set. Ask Noob Deity for a feedback hotkey."} /></PanelSectionRow>
+        {s?.hotkeys?.feedback ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "feedback" })}>Turn off the feedback hotkey</ButtonItem></PanelSectionRow> : null}
+        <PanelSectionRow><Field label="Hide widgets" description={s?.hotkeys?.hide ? `${s.hotkeys?.hide}: takes every widget off the screen, and brings them back.` : "Not set. Ask Noob Deity for a hotkey that hides and shows all widgets."} /></PanelSectionRow>
+        {s?.hotkeys?.hide ? <PanelSectionRow><ButtonItem layout="below" onClick={() => set({ clearHotkey: "hide" })}>Turn off the hide widgets hotkey</ButtonItem></PanelSectionRow> : null}
         <PanelSectionRow><Field label="Changing them" description="Noob Deity picks hotkeys for your controller and layout: ask it, for example “put talk on a back button”." /></PanelSectionRow>
       </PanelSection>
 
@@ -433,6 +434,7 @@ function SettingsPage() {
         </PanelSection>
       ) : null}
 
+      </>}
     </div>
   );
 }

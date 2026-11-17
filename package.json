@@ -1,6 +1,6 @@
 {
   "name": "noobdeity-decky",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Control Cult panel for Decky Loader (sideloaded): status, phone pairing and the controller layout in Game Mode.",
   "type": "module",
   "private": true,

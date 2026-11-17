@@ -6,6 +6,7 @@ import os
 import shutil
 import time
 import asyncio
+import ssl
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -210,8 +211,29 @@ INSTALL_TIMEOUT = 900
 STEPS = (("Downloading", "Downloading Control Cult (about 90 MB)…"), ("Getting the Control Cult window", "Getting the window ready…"))
 
 
+# Decky's own Python is a frozen build that can't find the system's certificates, so https fails with
+# CERTIFICATE_VERIFY_FAILED. SteamOS keeps them in the usual places: load them by hand.
+_CA_FILES = ("/etc/ssl/certs/ca-certificates.crt", "/etc/ca-certificates/extracted/tls-ca-bundle.pem", "/etc/pki/tls/certs/ca-bundle.crt", "/etc/ssl/cert.pem")
+_SSL = None
+
+
+def _ssl_context():
+    global _SSL
+    if _SSL is None:
+        ctx = ssl.create_default_context()
+        for f in _CA_FILES:
+            if os.path.isfile(f):
+                try:
+                    ctx.load_verify_locations(cafile=f)
+                    break
+                except Exception:
+                    pass
+        _SSL = ctx
+    return _SSL
+
+
 def _fetch(url, timeout=60):
-    with urllib.request.urlopen(url, timeout=timeout) as r:
+    with urllib.request.urlopen(url, timeout=timeout, context=_ssl_context() if url.startswith("https") else None) as r:
         return r.read()
 
 
