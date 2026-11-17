@@ -48,7 +48,7 @@ function InstallPanel() {
   return (
     <PanelSection title="Control Cult">
       <PanelSectionRow><Field label="Talk to Noob Deity to set up your controls" description="Control Cult builds and tunes your Steam Input layouts by conversation, live while you play. Install it here; it starts with your Deck." /></PanelSectionRow>
-      <PanelSectionRow><TextField label="License code (optional)" description="Have one? Enter it now. If not, install first: you can get free goats right here after, no card needed." value={code} onChange={e => setCode(e.target.value)} /></PanelSectionRow>
+      <PanelSectionRow><TextField label="Sigil (optional)" description="Have one? Enter it now. If not, install first: you can get free goats right here after, no card needed." value={code} onChange={e => setCode(e.target.value)} /></PanelSectionRow>
       {st.state === "failed" ? <PanelSectionRow><Field label="The install didn't finish" description={st.error} /></PanelSectionRow> : null}
       <PanelSectionRow><ButtonItem layout="below" onClick={go}>{st.state === "failed" ? "Try again" : "Install Control Cult"}</ButtonItem></PanelSectionRow>
     </PanelSection>
@@ -267,7 +267,7 @@ function FreeSection({ onUnlocked }: { onUnlocked: () => void }) {
   };
   return (
     <PanelSection title="Free goats">
-      <PanelSectionRow><Field label="No license yet" description="Get your free goats here, no card needed: enter your email and tap the link we send you." /></PanelSectionRow>
+      <PanelSectionRow><Field label="No covenant yet" description="Get your free goats here, no card needed: enter your email and tap the link we send you." /></PanelSectionRow>
       <PanelSectionRow><TextField label="Your email" value={email} onChange={e => setEmail(e.target.value)} /></PanelSectionRow>
       <PanelSectionRow><ButtonItem layout="below" disabled={busy || !email.trim()} onClick={send}>{busy ? "Sending…" : note?.ok ? "Send again" : "Send my free goats"}</ButtonItem></PanelSectionRow>
       {note ? <PanelSectionRow><Field label={note.ok ? "Check your email" : note.full ? "No free goats right now" : "Not sent"} description={note.text} /></PanelSectionRow> : null}
@@ -316,10 +316,10 @@ function LicenseSection({ onUnlocked }: { onUnlocked?: () => void } = {}) {
     setL(r); setCode(""); setNote({ ok: true, text: "Control Cult is unlocked." }); onUnlocked?.();
   };
   return (
-    <PanelSection title="License">
-      <PanelSectionRow><Field label={l?.line || (l?.error ? "License: couldn't check it" : "License: checking…")} description={l?.line ? undefined : l?.error} /></PanelSectionRow>
+    <PanelSection title="Covenant">
+      <PanelSectionRow><Field label={l?.line || (l?.error ? "Covenant: couldn't check it" : "Covenant: checking…")} description={l?.line ? undefined : l?.error} /></PanelSectionRow>
       {l?.canEnter !== false ? <>
-        <PanelSectionRow><TextField label="Enter license code" description="It looks like CC-XXXX-XXXX-XXXX. Capitals and dashes don't matter." value={code} onChange={e => setCode(e.target.value)} /></PanelSectionRow>
+        <PanelSectionRow><TextField label="Enter your sigil" description="The code from your email: CC-XXXX-XXXX-XXXX. Capitals and dashes don't matter." value={code} onChange={e => setCode(e.target.value)} /></PanelSectionRow>
         <PanelSectionRow><ButtonItem layout="below" disabled={busy || !code.trim()} onClick={redeem}>{busy ? "Checking…" : "Unlock"}</ButtonItem></PanelSectionRow>
         {note ? <PanelSectionRow><Field label={note.ok ? "Done" : "Code not accepted"} description={note.text} /></PanelSectionRow> : null}
       </> : null}
